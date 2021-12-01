@@ -8,6 +8,8 @@ snake[0] = {
     y: 8 * BOX
 }
 
+let direction = "right";
+
 function drawScreen() {
     CTX.fillStyle = "whitesmoke";
     CTX.fillRect(0, 0, 16 * BOX, 16 * BOX);
@@ -20,5 +22,35 @@ function renderSnake() {
     }
 }
 
-drawScreen();
-renderSnake();
+function play() {
+    drawScreen();
+    renderSnake();
+
+    let snakeX = snake[0].x;
+    let snakeY = snake[0].y;
+
+    if(direction == "right") {
+        snakeX += BOX;
+    }
+    if(direction == "left") {
+        snakeX -= BOX;
+    }
+    if(direction == "up") {
+        snakeY += BOX;
+    }
+    if(direction == "down") {
+        snakeY -= BOX;
+    }
+ 
+    snake.pop();
+
+    let newHead = {
+        x: snakeX,
+        y: snakeY
+    }
+
+    snake.unshift(newHead);
+
+}
+
+let game = setInterval(play, 100); // renderiza o jogo a cada 100ms
