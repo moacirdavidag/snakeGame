@@ -8,6 +8,12 @@ snake[0] = {
     y: 8 * BOX
 }
 
+let food = {
+    x: Math.floor(Math.random() * 15 + 1) * BOX,
+    y: Math.floor(Math.random() * 15 + 1) * BOX,
+}
+
+
 let direction = "right";
 
 function drawScreen() {
@@ -22,9 +28,54 @@ function renderSnake() {
     }
 }
 
+function drawFood() {
+    CTX.fillStyle = "red";
+    CTX.fillRect(food.x, food.y, BOX, BOX);
+}
+
+document.addEventListener("keydown", update);
+
+function update(e) {
+    if(e.keyCode == 37 && direction != "right") {
+        direction = "left";
+    }
+    if(e.keyCode == 38 && direction != "down") {
+        direction = "down";
+    }
+    if(e.keyCode == 39 && direction != "left") {
+        direction = "right";
+    }
+    if(e.keyCode == 40 && direction != "up") {
+        direction = "up";
+    }
+}
+
 function play() {
+
+
+    if(snake[0].x > 15 * BOX && direction == "right") {
+        snake[0].x = 0;
+    }
+    if(snake[0].x < 0 && direction == "left") {
+        snake[0].x = 16 * BOX;
+    }
+    if(snake[0].y > 15 * BOX && direction == "up") {
+        snake[0].y = 0;
+    }
+    if(snake[0].y < 0 && direction == "down") {
+        snake[0].y = 16 * BOX;
+    }    
+
+    for(let i = 1; i < snake.length; i++) {
+        if(snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+            clearInterval(play);
+            alert("perdeu");
+        }
+    }
+
     drawScreen();
     renderSnake();
+    drawFood();
 
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
@@ -41,8 +92,14 @@ function play() {
     if(direction == "down") {
         snakeY -= BOX;
     }
+
+    if(snakeX != food.x || snakeY != food.y) {
+        snake.pop();
+    } else {
+        food.x = Math.floor(Math.random() * 15 + 1) * BOX;
+        food.y = Math.floor(Math.random() * 15 + 1) * BOX;       
+    }
  
-    snake.pop();
 
     let newHead = {
         x: snakeX,
